@@ -1,4 +1,4 @@
-import torch
+import torch 
 from torch.utils.data import Dataset, DataLoader
 
 class GPTDatasetV1(Dataset):
@@ -16,5 +16,6 @@ class GPTDatasetV1(Dataset):
 
     def __len__(self):
         return len(self.input_ids)
+    
     def __getitem__(self, idx):
         return self.input_ids[idx], self.target_ids[idx]
