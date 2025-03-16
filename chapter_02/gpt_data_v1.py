@@ -1,5 +1,5 @@
 import torch 
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 
 class GPTDatasetV1(Dataset):
     """A class to load data into a PyTorch Dataset"""
