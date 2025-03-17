@@ -1,12 +1,2 @@
-.Python
-[Bb]in
-[Ii]nclude
-[Ll]ib
-[Ll]ib64
-[Ll]ocal
-[Ss]cripts
-pyvenv.cfg
-.venv
-pip-selfcheck.json
-share/
-__pycache__/
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*
