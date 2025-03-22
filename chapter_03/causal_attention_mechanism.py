@@ -2,6 +2,7 @@
 
 import torch
 from self_attention import SelfAttentionV2
+from causal_attention import CausalAttention
 
 inputs = torch.tensor(
     [
@@ -44,3 +45,22 @@ print(masked)
 
 attn_weights = torch.softmax(masked / keys.shape[-1]**0.5, dim=1)
 print(attn_weights)
+
+torch.manual_seed(123)
+dropout = torch.nn.Dropout(0.5)   
+example = torch.ones(6, 6)     
+print(dropout(example))
+
+torch.manual_seed(123)
+print(dropout(attn_weights))
+
+batch = torch.stack((inputs, inputs), dim=0)
+print(batch.shape)  
+
+torch.Size([2, 6, 3])
+
+torch.manual_seed(123)
+context_length = batch.shape[1]
+ca = CausalAttention(d_in, D_OUT, context_length, 0.0)
+context_vecs = ca(batch)
+print("context_vecs.shape:", context_vecs.shape)
