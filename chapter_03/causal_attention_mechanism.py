@@ -1,8 +1,10 @@
 """A causal attention mechanism implemented with PyTorch."""
 
 import torch
-from self_attention import SelfAttentionV2
 from causal_attention import CausalAttention
+from multi_head_attention import MultiHeadAttention
+from multi_head_attention_wrapper import MultiHeadAttentionWrapper
+from self_attention import SelfAttentionV2
 
 inputs = torch.tensor(
     [
@@ -64,3 +66,22 @@ context_length = batch.shape[1]
 ca = CausalAttention(d_in, D_OUT, context_length, 0.0)
 context_vecs = ca(batch)
 print("context_vecs.shape:", context_vecs.shape)
+
+torch.manual_seed(123)
+context_length = batch.shape[1]
+d_in, d_out = 3, 2
+
+mha = MultiHeadAttentionWrapper(d_in, d_out, context_length, 0.0, 2)
+context_vecs = mha(batch)
+
+print(context_vecs)
+print("context_vecs.shape:", context_vecs.shape)
+
+torch.manual_seed(123)
+batch_size, context_length, d_in = batch.shape
+d_out = 2
+mha = MultiHeadAttention(d_in, d_out, context_length, 0.0, num_heads=2)
+context_vecs = mha(batch)
+print(context_vecs)
+print("context_vecs.shape:", context_vecs.shape)
+
