@@ -6,6 +6,8 @@ from chapter_03.multi_head_attention import MultiHeadAttention
 
 
 class TransformerBlock(nn.Module):
+    """A Transformer Block"""
+
     def __init__(self, cfg):
         super().__init__()
         self.att = MultiHeadAttention(
