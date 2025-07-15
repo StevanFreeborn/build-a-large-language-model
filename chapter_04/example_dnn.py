@@ -1,6 +1,6 @@
 """Example Deep Neural Network"""
 
-from gelu import GELU
+from chapter_04.gelu import GELU
 from torch import nn
 
 

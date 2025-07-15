@@ -1,8 +1,7 @@
 """Feed Forward Module"""
 
-from gelu import GELU
+from chapter_04.gelu import GELU
 from torch import nn
-
 
 class FeedForward(nn.Module):
     """Feed Forward Module"""
@@ -12,6 +11,7 @@ class FeedForward(nn.Module):
         self.layers = nn.Sequential(
             nn.Linear(cfg["emb_dim"], 4 * cfg["emb_dim"]),
             GELU(),
+            nn.Linear(4 * cfg["emb_dim"], cfg["emb_dim"]),
         )
 
     def forward(self, x):

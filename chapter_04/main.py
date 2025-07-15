@@ -2,13 +2,15 @@
 
 import tiktoken
 import torch
-from config import GPT_CONFIG_124M
-from dummy_gpt_model import DummpyGptModel
-from layer_norm import LayerNorm
 from torch import nn
 
+from chapter_04.config import GPT_CONFIG_124M
+from chapter_04.dummy_gpt_model import DummpyGptModel
 from chapter_04.example_dnn import ExampleDeepNeuralNetwork
 from chapter_04.feed_forward import FeedForward
+from chapter_04.gpt_model import GPTModel
+from chapter_04.layer_norm import LayerNorm
+from chapter_04.transformer import TransformerBlock
 
 tokenizer = tiktoken.get_encoding("gpt2")
 batch = []
@@ -81,3 +83,67 @@ print_gradients(model_without_shortcut, sample_input)
 torch.manual_seed(123)
 model_with_shortcut = ExampleDeepNeuralNetwork(layer_sizes, use_shortcut=True)
 print_gradients(model_with_shortcut, sample_input)
+
+torch.manual_seed(123)
+x = torch.randn(2, 4, 768)
+block = TransformerBlock(GPT_CONFIG_124M)
+output = block(x)
+
+print("Input shape:", x.shape)
+print("Output shape:", output.shape)
+
+torch.manual_seed(123)
+model = GPTModel(GPT_CONFIG_124M)
+out = model(batch)
+
+print("Input batch:\n", batch)
+print("\nOutput shape:", out.shape)
+print(out)
+
+total_params = sum(p.numel() for p in model.parameters())
+print(f"Total number of parameters: {total_params:,}")
+
+total_size_bytes = total_params * 4
+total_size_mb = total_size_bytes / (1024 * 1024)
+print(f"Total size of the model: {total_size_mb:.2f} MB")
+
+
+def generate_text_simple(model, idx, max_new_tokens, context_size):
+    """Generate text using our GPT model."""
+
+    for _ in range(max_new_tokens):
+        idx_cond = idx[:, -context_size:]
+
+        with torch.no_grad():
+            logits = model(idx_cond)
+
+        logits = logits[:, -1, :]
+        probas = torch.softmax(logits, dim=-1)
+        idx_next = torch.argmax(probas, dim=-1, keepdim=True)
+        idx = torch.cat((idx, idx_next), dim=1)
+
+    return idx
+
+
+start_context = "Hello, I am"
+print("Start context:", start_context)
+encoded = tokenizer.encode(start_context)
+print("encoded:", encoded)
+
+encoded_tensor = torch.tensor(encoded).unsqueeze(0)
+print("encoded_tensor.shape:", encoded_tensor.shape)
+
+model.eval()
+
+out = generate_text_simple(
+    model,
+    encoded_tensor,
+    max_new_tokens=6,
+    context_size=GPT_CONFIG_124M["context_length"],
+)
+
+print("Output:", out)
+print("Output length:", len(out[0]))
+
+decoded_text = tokenizer.decode(out.squeeze().tolist())
+print("Decoded text:", decoded_text)

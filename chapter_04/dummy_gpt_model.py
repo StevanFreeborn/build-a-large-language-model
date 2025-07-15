@@ -1,7 +1,8 @@
 import torch
-from dummy_layer_norm import DummyLayerNorm
-from dummy_transformer_block import DummyTransformerBlock
 from torch import nn
+
+from chapter_04.dummy_layer_norm import DummyLayerNorm
+from chapter_04.dummy_transformer_block import DummyTransformerBlock
 
 
 class DummpyGptModel(nn.Module):

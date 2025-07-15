@@ -1,3 +1,4 @@
+"""Configuration settings for the GPT model."""
 GPT_CONFIG_124M = {
     "vocab_size": 50257,
     "context_length": 1024,
