@@ -2,7 +2,7 @@ import torch
 import os
 from torch.utils.data import DataLoader
 import tiktoken
-from gpt_data_v1 import GPTDatasetV1
+from chapter_02.gpt_data_v1 import GPTDatasetV1
 
 def create_dataloader_v1(
     txt,
